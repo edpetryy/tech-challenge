@@ -1,37 +1,42 @@
-# tech-challenge
+Node 14 + Express + MonoDB + Docker + memory-cache
 
-### Desafio Backend
-Nosso passatempo favorito nessa quarentena tem sido assistir filmes e seriados, por isso pensamos em desenvolver uma solução que nos ajude na hora de selecionar o que mais gostamos. Caso você aceite o nosso desafio, precisamos que você implemente um sistema onde será possível buscar por filmes e séries utilizando a API (http://www.omdbapi.com/). Com todos esses filmes a nossa disposição queremos basicamente separar nossos favoritos, para que possamos encontrá-los facilmente depois. Portanto a sua solução deve:
+# Instalação
 
-- Permitir a busca por filmes que gostamos
-- Listar os filmes encontrados
-- Permitir que escolhamos nosso filmes favoritos
-- Permitir que removamos um filme de nossos favoritos (às vezes um filme enjoa)
-- Listar nossos filmes favoritos
+## Requisitos para instalação
 
-Esse é um exemplo de API que esperamos para a construção deste desafio:
+    git
+    node 14
+    npm 6
+    mongo
 
-```
-Chave de API: 925eba28
-Exemplo requisição: GET http://www.omdbapi.com/?apikey=925eba28&s=batman
-```
+    docker
+    docker-compose
 
-### Comportamento esperado da aplicação:
-1) Ao buscar um filme, a aplicação deve buscar a informação em um banco de dados em memória (cache);
-2) Caso encontrar, os dados devem ser retornados. Caso não, a consulta deve ser realizada no banco de dados da aplicação (relacional ou não);
-3) Caso encontrar, os dados devem ser retornados. Caso não, deve ser feita a integração com a API dos filmes, salvando os dados no banco de dados da aplicação e em memória, e retornando os dados.
+## Configuração
 
-### Observações:
-* Pode ser utilizado qualquer banco de dados;
-* Stack de preferência: Node.js;
-* Caso deseje implementar o frontend a Stack de preferência é React ou React-Native;
-* Será um diferencial se a aplicação estiver hospedada em algum provedor;
-* É importante que haja uma descrição de como realizar o teste da solução.
+Renomeie o arquivo `.env.example` para `.env`, ajuste os as configurações de acesso ao banco de
+dados.
 
-### Entrega da sua solução
-Deixe bem claro suas premissas, suposições e como executamos seu código. Para entregar essa solução, de um “fork” neste repositório e nos mande o link do novo repositório quando finalizar a tarefa.
-O prazo para a entrega da solução é de 72h a partir de seu início.
+Rodar o comando
 
-Aguardamos seu retorno,
+    npm install
 
-Boa sorte!
+Parar rodar a aplicação, executar `npm run dev`
+
+## Executando no Docker
+
+Rodar o comando
+
+    docker-compose up
+
+# Rotas
+
+- POST:user - criação de um usuário; parâmetros via body: `name, login, password`
+- POST:login - login na aplicação; parâmetros via body: `login, password`; retorna `user, token`
+- GET:user/favorite - retorna a lista de favoritos; header com authorization: `Bearer token`;
+  retorna `favorites`
+- PATCH:user/favorite - retorna a lista de favoritos; header com authorization: `Bearer token` e
+  body com: `video_id` ; retorna `favorites`
+- GET:videos - retorna a lista de videos; parâmetros via query: `search, page, type, year`, com
+  defaults: `search = "batman", type = "movie", page = "1"` ; retorna `video`
+- GET:videos/:id - retorna o video com o id; retorna objeto video
